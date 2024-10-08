@@ -12,19 +12,19 @@ import org.springframework.stereotype.Component;
 //and logs to console and log file
 @Aspect
 @Component
-@ConditionalOnExpression("${aspect.enabled:true}")
+// @ConditionalOnExpression("${aspect.enabled:true}")
 public class ExecutionTimeAdvice {
 
-	Logger log = LoggerFactory.getLogger(ExecutionTimeAdvice.class);
+    Logger log = LoggerFactory.getLogger(ExecutionTimeAdvice.class);
 	
-    @Around("@annotation(com.learning.project.util.TrackExecutionTime)")
+    @Around("@annotation(TrackExecutionTime)")
     public Object executionTime(ProceedingJoinPoint point) throws Throwable {
-        System.out.println("Inside: Class Name: "+ point.getSignature().getDeclaringTypeName() +". Method Name: "+ point.getSignature().getName());
+        log.info("Inside Method: "+ point.getSignature().getName());
         long startTime = System.currentTimeMillis();
         Object object = point.proceed();
         long endtime = System.currentTimeMillis();
         log.info("Class Name: "+ point.getSignature().getDeclaringTypeName() +". Method Name: "+ point.getSignature().getName() + ". Time taken for Execution is : " + (endtime-startTime) +"ms");
-//        System.out.println("Class Name: "+ point.getSignature().getDeclaringTypeName() +". Method Name: "+ point.getSignature().getName() + ". Time taken for Execution is : " + (endtime-startTime) +"ms");
+//        log.info("Class Name: "+ point.getSignature().getDeclaringTypeName() +". Method Name: "+ point.getSignature().getName() + ". Time taken for Execution is : " + (endtime-startTime) +"ms");
 
         return object;
     }
